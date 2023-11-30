@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             fleetGroupBox = new GroupBox();
-            checkBox1 = new CheckBox();
-            radioButton3 = new RadioButton();
-            radioButton2 = new RadioButton();
-            radioButton1 = new RadioButton();
+            rotateCheckBox = new CheckBox();
+            briggRadioButton = new RadioButton();
+            corvetteRadioButton = new RadioButton();
+            fregateRadioButton = new RadioButton();
             lincoreRadioButton = new RadioButton();
             groupBox1 = new GroupBox();
             cellsFlowLayoutPanel = new FlowLayoutPanel();
@@ -41,10 +41,10 @@
             // 
             // fleetGroupBox
             // 
-            fleetGroupBox.Controls.Add(checkBox1);
-            fleetGroupBox.Controls.Add(radioButton3);
-            fleetGroupBox.Controls.Add(radioButton2);
-            fleetGroupBox.Controls.Add(radioButton1);
+            fleetGroupBox.Controls.Add(rotateCheckBox);
+            fleetGroupBox.Controls.Add(briggRadioButton);
+            fleetGroupBox.Controls.Add(corvetteRadioButton);
+            fleetGroupBox.Controls.Add(fregateRadioButton);
             fleetGroupBox.Controls.Add(lincoreRadioButton);
             fleetGroupBox.Dock = DockStyle.Right;
             fleetGroupBox.FlatStyle = FlatStyle.Flat;
@@ -59,56 +59,54 @@
             fleetGroupBox.TabStop = false;
             fleetGroupBox.Text = "SHIP SELECTION";
             // 
-            // checkBox1
+            // rotateCheckBox
             // 
-            checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(86, 293);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Padding = new Padding(10);
-            checkBox1.Size = new Size(101, 48);
-            checkBox1.TabIndex = 4;
-            checkBox1.Text = "ROTATE";
-            checkBox1.UseVisualStyleBackColor = true;
+            rotateCheckBox.AutoSize = true;
+            rotateCheckBox.Location = new Point(86, 293);
+            rotateCheckBox.Name = "rotateCheckBox";
+            rotateCheckBox.Padding = new Padding(10);
+            rotateCheckBox.Size = new Size(101, 48);
+            rotateCheckBox.TabIndex = 4;
+            rotateCheckBox.Text = "ROTATE";
+            rotateCheckBox.UseVisualStyleBackColor = true;
             // 
-            // radioButton3
+            // briggRadioButton
             // 
-            radioButton3.AutoSize = true;
-            radioButton3.Location = new Point(10, 237);
-            radioButton3.Name = "radioButton3";
-            radioButton3.Padding = new Padding(10);
-            radioButton3.Size = new Size(90, 48);
-            radioButton3.TabIndex = 3;
-            radioButton3.TabStop = true;
-            radioButton3.Text = "BRIGG";
-            radioButton3.UseVisualStyleBackColor = true;
+            briggRadioButton.AutoSize = true;
+            briggRadioButton.Location = new Point(10, 237);
+            briggRadioButton.Name = "briggRadioButton";
+            briggRadioButton.Padding = new Padding(10);
+            briggRadioButton.Size = new Size(90, 48);
+            briggRadioButton.TabIndex = 3;
+            briggRadioButton.Text = "BRIGG";
+            briggRadioButton.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // corvetteRadioButton
             // 
-            radioButton2.AutoSize = true;
-            radioButton2.Location = new Point(10, 173);
-            radioButton2.Name = "radioButton2";
-            radioButton2.Padding = new Padding(10);
-            radioButton2.Size = new Size(116, 48);
-            radioButton2.TabIndex = 2;
-            radioButton2.TabStop = true;
-            radioButton2.Text = "CORVETTE";
-            radioButton2.UseVisualStyleBackColor = true;
+            corvetteRadioButton.AutoSize = true;
+            corvetteRadioButton.Location = new Point(10, 173);
+            corvetteRadioButton.Name = "corvetteRadioButton";
+            corvetteRadioButton.Padding = new Padding(10);
+            corvetteRadioButton.Size = new Size(116, 48);
+            corvetteRadioButton.TabIndex = 2;
+            corvetteRadioButton.Text = "CORVETTE";
+            corvetteRadioButton.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // fregateRadioButton
             // 
-            radioButton1.AutoSize = true;
-            radioButton1.Location = new Point(10, 109);
-            radioButton1.Name = "radioButton1";
-            radioButton1.Padding = new Padding(10);
-            radioButton1.Size = new Size(107, 48);
-            radioButton1.TabIndex = 1;
-            radioButton1.TabStop = true;
-            radioButton1.Text = "FREGATE";
-            radioButton1.UseVisualStyleBackColor = true;
+            fregateRadioButton.AutoSize = true;
+            fregateRadioButton.Location = new Point(10, 109);
+            fregateRadioButton.Name = "fregateRadioButton";
+            fregateRadioButton.Padding = new Padding(10);
+            fregateRadioButton.Size = new Size(107, 48);
+            fregateRadioButton.TabIndex = 1;
+            fregateRadioButton.Text = "FREGATE";
+            fregateRadioButton.UseVisualStyleBackColor = true;
             // 
             // lincoreRadioButton
             // 
             lincoreRadioButton.AutoSize = true;
+            lincoreRadioButton.Checked = true;
             lincoreRadioButton.Location = new Point(10, 45);
             lincoreRadioButton.Name = "lincoreRadioButton";
             lincoreRadioButton.Padding = new Padding(10);
@@ -160,10 +158,10 @@
 
         private GroupBox fleetGroupBox;
         private RadioButton lincoreRadioButton;
-        private RadioButton radioButton3;
-        private RadioButton radioButton2;
-        private RadioButton radioButton1;
-        private CheckBox checkBox1;
+        private RadioButton briggRadioButton;
+        private RadioButton corvetteRadioButton;
+        private RadioButton fregateRadioButton;
+        private CheckBox rotateCheckBox;
         private GroupBox groupBox1;
         private FlowLayoutPanel cellsFlowLayoutPanel;
     }

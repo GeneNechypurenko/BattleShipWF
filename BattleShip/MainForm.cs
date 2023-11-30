@@ -4,6 +4,7 @@ namespace BattleShip
 {
     public partial class MainForm : Form
     {
+        ShipsSetupUserControl shipsSetupUserControl;
         public MainForm()
         {
             InitializeComponent();
@@ -12,7 +13,7 @@ namespace BattleShip
         private void startScreenButton_Click(object sender, EventArgs e)
         {
             RenderScreen();
-            ShipsSetupUserControl shipsSetupUserControl = new ShipsSetupUserControl();
+            shipsSetupUserControl = new ShipsSetupUserControl();
             Controls.Add(shipsSetupUserControl);
             shipsSetupUserControl.Show();
         }
