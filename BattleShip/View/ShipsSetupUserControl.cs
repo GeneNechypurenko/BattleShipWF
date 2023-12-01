@@ -1,16 +1,5 @@
 ﻿using BattleShip.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics.Metrics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using RadioButton = System.Windows.Forms.RadioButton;
 
 namespace BattleShip.View
 {
@@ -32,8 +21,70 @@ namespace BattleShip.View
             board = new Board();
             InitializeComponent();
             Paint += ShipsSetupUserControl_Paint;
+            InitializeNotificationLabels();
+        }
+        private void InitializeNotificationLabels()
+        {
+            foreach (RadioButton selectedRadioButton in fleetGroupBox.Controls.OfType<RadioButton>())
+            {
+                if (selectedRadioButton.Checked)
+                {
+                    shipSelectedLabel.Text = $"SHIP SELECTED {selectedRadioButton.Tag.ToString()}";
+                    selectedRadioButton.CheckedChanged += SelectedRadioButton_CheckedChanged;
+                    selectedRadioButton.EnabledChanged += SelectedRadioButton_EnabledChanged;
+                }
+            }
+
+            if (rotateCheckBox.Checked)
+            {
+                orientationSelectedLabel.Text = "ORIENTATION VERTICAL";
+            }
+            else
+            {
+                orientationSelectedLabel.Text = "ORIENTATION HORIZONTAL";
+            }
+            rotateCheckBox.CheckedChanged += RotateCheckBox_CheckedChanged;
+
+            lincoreSetLabel.Text += LincoreSet.ToString();
+            fregateSetLabel.Text += FregateSet.ToString();
+            corvetteSetLabel.Text += CorvetteSet.ToString();
+            briggSetLabel.Text += BriggSet.ToString();
         }
 
+        private void RotateCheckBox_CheckedChanged(object? sender, EventArgs e)
+        {
+            if (rotateCheckBox.Checked)
+            {
+                orientationSelectedLabel.Text = "ORIENTATION VERTICAL";
+            }
+            else
+            {
+                orientationSelectedLabel.Text = "ORIENTATION HORIZONTAL";
+            }
+        }
+        private void SelectedRadioButton_EnabledChanged(object? sender, EventArgs e)
+        {
+            RadioButton selectedRadioButton = sender as RadioButton;
+
+            if (selectedRadioButton.Checked && !selectedRadioButton.Enabled)
+            {
+                shipSelectedLabel.ForeColor = Color.Crimson;
+                shipSelectedLabel.Text = $"NO SHIP SELECTED";
+            }
+        }
+
+        private void SelectedRadioButton_CheckedChanged(object? sender, EventArgs e)
+        {
+            foreach (RadioButton selectedRadioButton in fleetGroupBox.Controls.OfType<RadioButton>())
+            {
+                if (selectedRadioButton.Checked)
+                {
+                    shipSelectedLabel.ForeColor = Color.Ivory;
+                    shipSelectedLabel.Text = $"SHIP SELECTED {selectedRadioButton.Tag.ToString()}";
+                    selectedRadioButton.CheckedChanged += SelectedRadioButton_CheckedChanged;
+                }
+            }
+        }
         private void ShipsSetupUserControl_Paint(object? sender, PaintEventArgs e)
         {
             DrawBorderTopString();
@@ -57,45 +108,6 @@ namespace BattleShip.View
                     };
                     cellsFlowLayoutPanel.Controls.Add(cellPictureBox);
                     cellPictureBox.Click += CellPictureBox_Click;
-                }
-            }
-        }
-        private void CellPictureBox_Click(object sender, EventArgs e)
-        {
-            PictureBox clickedPictureBox = sender as PictureBox;
-
-            foreach (var ship in board.Ships)
-            {
-                if (lincoreRadioButton.Checked && !rotateCheckBox.Checked)
-                {
-                    SetLincoreHorizontal(ship, clickedPictureBox);                    
-                }
-                else if (lincoreRadioButton.Checked && rotateCheckBox.Checked)
-                {
-                    SetLincoreVertical(ship, clickedPictureBox);
-                }
-
-                else if (fregateRadioButton.Checked && !rotateCheckBox.Checked)
-                {
-                    SetFregateHorizontal(ship, clickedPictureBox);
-                }
-                else if (fregateRadioButton.Checked && rotateCheckBox.Checked)
-                {
-                    SetFregateVertical(ship, clickedPictureBox);
-                }
-
-                else if (corvetteRadioButton.Checked && !rotateCheckBox.Checked)
-                {
-                    SetCorvetteHorizontal(ship, clickedPictureBox);
-                }
-                else if (corvetteRadioButton.Checked && rotateCheckBox.Checked)
-                {
-                    SetCorvetteVertical(ship, clickedPictureBox);
-                }
-
-                else if (briggRadioButton.Checked)
-                {
-                    SetBrigg(ship, clickedPictureBox);
                 }
             }
         }
@@ -128,261 +140,386 @@ namespace BattleShip.View
                 }
             }
         }
-        private void SetLincoreHorizontal(Ship ship, PictureBox? clickedPictureBox)
+        private void CellPictureBox_Click(object sender, EventArgs e)
         {
-            if (ship.Size == 4 && LincoreSet > 0)
+            PictureBox clickedPictureBox = sender as PictureBox;
+
+            if (lincoreRadioButton.Checked && LincoreSet != 0)
             {
-                string[] coordinates = clickedPictureBox.Tag.ToString().Split(':');
+                Ship ship = new Ship { Size = 4, IsSunk = false, IsVertical = false };
+                PlaceShipOnBoard(ship, clickedPictureBox);
+                if (LincoreSet == 0) { lincoreRadioButton.Enabled = false; }
+            }
+            else if (fregateRadioButton.Checked && FregateSet != 0)
+            {
+                Ship ship = new Ship { Size = 3, IsSunk = false, IsVertical = false };
+                PlaceShipOnBoard(ship, clickedPictureBox);
+                if (FregateSet == 0) { fregateRadioButton.Enabled = false; }
+            }
+            else if (corvetteRadioButton.Checked && CorvetteSet != 0)
+            {
+                Ship ship = new Ship { Size = 2, IsSunk = false, IsVertical = false };
+                PlaceShipOnBoard(ship, clickedPictureBox);
+                if (CorvetteSet == 0) { corvetteRadioButton.Enabled = false; }
+            }
+            else if (briggRadioButton.Checked && BriggSet != 0)
+            {
+                Ship ship = new Ship { Size = 1, IsSunk = false, IsVertical = false };
+                PlaceShipOnBoard(ship, clickedPictureBox);
+                if (BriggSet == 0) { briggRadioButton.Enabled = false; }
+            }
+        }
+        private void PlaceShipOnBoard(Ship ship, PictureBox? clickedPictureBox)
+        {
+            string[] coordinates = clickedPictureBox.Tag.ToString().Split(':');
 
-                if (coordinates.Length == 2 && int.TryParse(coordinates[0], out int i) && int.TryParse(coordinates[1], out int j))
+            if (coordinates.Length == 2 && int.TryParse(coordinates[0], out int i) && int.TryParse(coordinates[1], out int j))
+            {
+                if (j <= boardCells - ship.Size && !rotateCheckBox.Checked && !board.IsOccupiedCell[i, j] && !board.IsOccupiedCell[i, j + ship.Size - 1] ||
+                    i <= boardCells - ship.Size && rotateCheckBox.Checked && !board.IsOccupiedCell[i, j] && !board.IsOccupiedCell[i + ship.Size - 1, j])
                 {
-                    if (j < 7)
-                    {
-                        ship.PosX = new int[] { i, i, i, i };
-                        ship.PosY = new int[] { j, j + 1, j + 2, j + 3 };
+                    SetShipPosXY(ship, i, j);
+                    SetCellPictureBoxColor(ship, i, j);
+                    SetShipOnBoard(ship, i, j);
 
-                        LincoreSet--;
+                    board.Ships.Add(ship);
 
-                        lincoreRadioButton.Enabled = false;
-
-                        foreach (Control control in cellsFlowLayoutPanel.Controls)
-                        {
-                            if (control is PictureBox pictureBox && pictureBox.Tag.ToString() == $"{i}:{j}")
-                            {
-                                pictureBox.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox && nextPictureBox.Tag.ToString() == $"{i}:{j + 1}")
-                            {
-                                nextPictureBox.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox2 && nextPictureBox2.Tag.ToString() == $"{i}:{j + 2}")
-                            {
-                                nextPictureBox2.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox3 && nextPictureBox3.Tag.ToString() == $"{i}:{j + 3}")
-                            {
-                                nextPictureBox3.BackColor = Color.Green;
-                            }
-                        }
-                    }
+                    notificationLabel.ForeColor = Color.LawnGreen;
+                    notificationLabel.Text = "SHIP PLACED!";
+                }
+                else
+                {
+                    notificationLabel.ForeColor = Color.Crimson;
+                    notificationLabel.Text = "CAN'T PLACE SHIP THERE!";
                 }
             }
         }
-        private void SetLincoreVertical(Ship ship, PictureBox? clickedPictureBox)
+        private void SetShipOnBoard(Ship ship, int i, int j)
         {
-            if (ship.Size == 4 && LincoreSet != 0)
-            {
-                string[] coordinates = clickedPictureBox.Tag.ToString().Split(':');
+            if (ship.IsVertical) { SetShipOnBoardVertical(ship, i, j); }
+            else { SetShipOnBoardHorizontal(ship, i, j); }
+        }
 
-                if (coordinates.Length == 2 && int.TryParse(coordinates[0], out int i) && int.TryParse(coordinates[1], out int j))
+        private void SetShipOnBoardHorizontal(Ship ship, int i, int j)
+        {
+            for (int col = j; col < j + ship.Size; col++)
+            {
+                board.Board2d[i, col] = 1;
+                board.IsOccupiedCell[i, col] = true;
+
+                if (i == 0 && j == 0) // top left corner
                 {
-                    if (i < 7)
+                    board.IsOccupiedCell[i, col + 1] = true;
+                    board.IsOccupiedCell[i + 1, col] = true;
+                    board.IsOccupiedCell[i + 1, col + 1] = true;
+                }
+                else if (i == boardCells - 1 && j == 0) // bot left corner
+                {
+                    board.IsOccupiedCell[i - 1, col] = true;
+                    board.IsOccupiedCell[i - 1, col + 1] = true;
+                    board.IsOccupiedCell[i, col + 1] = true;
+                }
+                else if (j == 0) // left border edge
+                {
+                    board.IsOccupiedCell[i - 1, col] = true;
+                    board.IsOccupiedCell[i - 1, col + 1] = true;
+                    board.IsOccupiedCell[i + 1, col] = true;
+                    board.IsOccupiedCell[i, col + 1] = true;
+                    board.IsOccupiedCell[i + 1, col + 1] = true;
+                }
+                else if (i == 0 && j + ship.Size == boardCells) // top right corner
+                {
+                    board.IsOccupiedCell[i, col - 1] = true;
+                    board.IsOccupiedCell[i + 1, col - 1] = true;
+                    board.IsOccupiedCell[i + 1, col] = true;
+                }
+                else if (i == boardCells - 1 && j + ship.Size == boardCells) // bot right corner
+                {
+                    board.IsOccupiedCell[i - 1, col] = true;
+                    board.IsOccupiedCell[i - 1, col - 1] = true;
+                    board.IsOccupiedCell[i, col - 1] = true;
+                }
+                else if (j + ship.Size == boardCells) // right border edge
+                {
+                    board.IsOccupiedCell[i - 1, col] = true;
+                    board.IsOccupiedCell[i - 1, col - 1] = true;
+                    board.IsOccupiedCell[i + 1, col] = true;
+                    board.IsOccupiedCell[i, col - 1] = true;
+                    board.IsOccupiedCell[i + 1, col - 1] = true;
+                }
+                else if (i == 0) // top border edge
+                {
+                    board.IsOccupiedCell[i, col - 1] = true;
+                    board.IsOccupiedCell[i, col + 1] = true;
+                    board.IsOccupiedCell[i + 1, col - 1] = true;
+                    board.IsOccupiedCell[i + 1, col] = true;
+                    board.IsOccupiedCell[i + 1, col + 1] = true;
+                }
+                else if (i == boardCells - 1) // bot border edge
+                {
+                    board.IsOccupiedCell[i - 1, col] = true;
+                    board.IsOccupiedCell[i - 1, col - 1] = true;
+                    board.IsOccupiedCell[i - 1, col + 1] = true;
+                    board.IsOccupiedCell[i, col - 1] = true;
+                    board.IsOccupiedCell[i, col + 1] = true;
+                }
+                else // regular ship placement in the middle of the board
+                {
+                    board.IsOccupiedCell[i - 1, col] = true;
+                    board.IsOccupiedCell[i - 1, col - 1] = true;
+                    board.IsOccupiedCell[i - 1, col + 1] = true;
+                    board.IsOccupiedCell[i, col - 1] = true;
+                    board.IsOccupiedCell[i, col + 1] = true;
+                    board.IsOccupiedCell[i + 1, col + 1] = true;
+                    board.IsOccupiedCell[i + 1, col - 1] = true;
+                    board.IsOccupiedCell[i + 1, col] = true;
+                }
+            }
+        }
+        private void SetShipOnBoardVertical(Ship ship, int i, int j)
+        {
+            for (int row = i; row < i + ship.Size; row++)
+            {
+                board.Board2d[row, j] = 1;
+                board.IsOccupiedCell[row, j] = true;
+
+                if (i == 0 && j == 0) // top left corner
+                {
+                    board.IsOccupiedCell[row + 1, j] = true;
+                    board.IsOccupiedCell[row, j + 1] = true;
+                    board.IsOccupiedCell[row + 1, j + 1] = true;
+                }
+                else if (i + ship.Size == boardCells && j == 0) // bot left corner
+                {
+                    board.IsOccupiedCell[row - 1, j] = true;
+                    board.IsOccupiedCell[row - 1, j + 1] = true;
+                    board.IsOccupiedCell[row, j + 1] = true;
+                }
+                else if (j == 0) // left border edge
+                {
+                    board.IsOccupiedCell[row - 1, j] = true;
+                    board.IsOccupiedCell[row - 1, j + 1] = true;
+                    board.IsOccupiedCell[row + 1, j] = true;
+                    board.IsOccupiedCell[row, j + 1] = true;
+                    board.IsOccupiedCell[row + 1, j + 1] = true;
+                }
+                else if (i == 0 && j == boardCells - 1) // top right corner
+                {
+                    board.IsOccupiedCell[row, j - 1] = true;
+                    board.IsOccupiedCell[row + 1, j - 1] = true;
+                    board.IsOccupiedCell[row + 1, j] = true;
+                }
+                else if (i + ship.Size == boardCells && j == boardCells - 1) // bot right corner
+                {
+                    board.IsOccupiedCell[row - 1, j] = true;
+                    board.IsOccupiedCell[row - 1, j - 1] = true;
+                    board.IsOccupiedCell[row, j - 1] = true;
+                }
+                else if (j == boardCells - 1) // ritgh border edge
+                {
+                    board.IsOccupiedCell[row - 1, j] = true;
+                    board.IsOccupiedCell[row - 1, j - 1] = true;
+                    board.IsOccupiedCell[row + 1, j] = true;
+                    board.IsOccupiedCell[row, j - 1] = true;
+                    board.IsOccupiedCell[row + 1, j - 1] = true;
+                }
+                else if (i == 0) // top border edge
+                {
+                    board.IsOccupiedCell[row, j - 1] = true;
+                    board.IsOccupiedCell[row, j + 1] = true;
+                    board.IsOccupiedCell[row + 1, j - 1] = true;
+                    board.IsOccupiedCell[row + 1, j] = true;
+                    board.IsOccupiedCell[row + 1, j + 1] = true;
+                }
+                else if (i + ship.Size == boardCells) // bot border edge
+                {
+                    board.IsOccupiedCell[row - 1, j] = true;
+                    board.IsOccupiedCell[row - 1, j - 1] = true;
+                    board.IsOccupiedCell[row - 1, j + 1] = true;
+                    board.IsOccupiedCell[row, j - 1] = true;
+                    board.IsOccupiedCell[row, j + 1] = true;
+                }
+                else // regular ship placement in the middle of the board
+                {
+                    board.IsOccupiedCell[row - 1, j] = true;
+                    board.IsOccupiedCell[row - 1, j - 1] = true;
+                    board.IsOccupiedCell[row - 1, j + 1] = true;
+                    board.IsOccupiedCell[row, j - 1] = true;
+                    board.IsOccupiedCell[row, j + 1] = true;
+                    board.IsOccupiedCell[row + 1, j + 1] = true;
+                    board.IsOccupiedCell[row + 1, j - 1] = true;
+                    board.IsOccupiedCell[row + 1, j] = true;
+                }
+            }
+        }
+        private void SetCellPictureBoxColor(Ship ship, int i, int j)
+        {
+            if (!rotateCheckBox.Checked) { SetCellPictureBoxColorHorizontal(ship, i, j); }
+            else if (rotateCheckBox.Checked) { SetCellPictureBoxColorVertical(ship, i, j); }
+        }
+        private void SetCellPictureBoxColorVertical(Ship ship, int i, int j)
+        {
+            switch (ship.Size)
+            {
+                case 1:
+                    {
+                        foreach (Control control in cellsFlowLayoutPanel.Controls)
+                        {
+                            if (control is PictureBox cellPictureBox && cellPictureBox.Tag.ToString() == $"{i}:{j}") { cellPictureBox.BackColor = Color.Green; }
+                        }
+                        break;
+                    }
+                case 2:
+                    {
+                        foreach (Control control in cellsFlowLayoutPanel.Controls)
+                        {
+                            if (control is PictureBox cellPictureBox && cellPictureBox.Tag.ToString() == $"{i}:{j}") { cellPictureBox.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox && nextCellPictureBox.Tag.ToString() == $"{i + 1}:{j}") { nextCellPictureBox.BackColor = Color.Green; }
+                        }
+                        break;
+                    }
+                case 3:
+                    {
+                        foreach (Control control in cellsFlowLayoutPanel.Controls)
+                        {
+                            if (control is PictureBox cellPictureBox && cellPictureBox.Tag.ToString() == $"{i}:{j}") { cellPictureBox.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox && nextCellPictureBox.Tag.ToString() == $"{i + 1}:{j}") { nextCellPictureBox.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox2 && nextCellPictureBox2.Tag.ToString() == $"{i + 2}:{j}") { nextCellPictureBox2.BackColor = Color.Green; }
+                        }
+                        break;
+                    }
+                case 4:
+                    {
+                        foreach (Control control in cellsFlowLayoutPanel.Controls)
+                        {
+                            if (control is PictureBox cellPictureBox && cellPictureBox.Tag.ToString() == $"{i}:{j}") { cellPictureBox.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox && nextCellPictureBox.Tag.ToString() == $"{i + 1}:{j}") { nextCellPictureBox.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox2 && nextCellPictureBox2.Tag.ToString() == $"{i + 2}:{j}") { nextCellPictureBox2.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox3 && nextCellPictureBox3.Tag.ToString() == $"{i + 3}:{j}") { nextCellPictureBox3.BackColor = Color.Green; }
+                        }
+                        break;
+                    }
+            }
+        }
+        private void SetCellPictureBoxColorHorizontal(Ship ship, int i, int j)
+        {
+            switch (ship.Size)
+            {
+                case 1:
+                    {
+                        foreach (Control control in cellsFlowLayoutPanel.Controls)
+                        {
+                            if (control is PictureBox cellPictureBox && cellPictureBox.Tag.ToString() == $"{i}:{j}") { cellPictureBox.BackColor = Color.Green; }
+                        }
+                        break;
+                    }
+                case 2:
+                    {
+                        foreach (Control control in cellsFlowLayoutPanel.Controls)
+                        {
+                            if (control is PictureBox cellPictureBox && cellPictureBox.Tag.ToString() == $"{i}:{j}") { cellPictureBox.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox && nextCellPictureBox.Tag.ToString() == $"{i}:{j + 1}") { nextCellPictureBox.BackColor = Color.Green; }
+                        }
+                        break;
+                    }
+                case 3:
+                    {
+                        foreach (Control control in cellsFlowLayoutPanel.Controls)
+                        {
+                            if (control is PictureBox cellPictureBox && cellPictureBox.Tag.ToString() == $"{i}:{j}") { cellPictureBox.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox && nextCellPictureBox.Tag.ToString() == $"{i}:{j + 1}") { nextCellPictureBox.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox2 && nextCellPictureBox2.Tag.ToString() == $"{i}:{j + 2}") { nextCellPictureBox2.BackColor = Color.Green; }
+                        }
+                        break;
+                    }
+                case 4:
+                    {
+                        foreach (Control control in cellsFlowLayoutPanel.Controls)
+                        {
+                            if (control is PictureBox cellPictureBox && cellPictureBox.Tag.ToString() == $"{i}:{j}") { cellPictureBox.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox && nextCellPictureBox.Tag.ToString() == $"{i}:{j + 1}") { nextCellPictureBox.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox2 && nextCellPictureBox2.Tag.ToString() == $"{i}:{j + 2}") { nextCellPictureBox2.BackColor = Color.Green; }
+                            else if (control is PictureBox nextCellPictureBox3 && nextCellPictureBox3.Tag.ToString() == $"{i}:{j + 3}") { nextCellPictureBox3.BackColor = Color.Green; }
+                        }
+                        break;
+                    }
+            }
+        }
+        private void SetShipPosXY(Ship ship, int i, int j)
+        {
+            if (!rotateCheckBox.Checked) { SetShipPosXYHorizontal(ship, i, j); }
+            else if (rotateCheckBox.Checked) { SetShipPosXYVertical(ship, i, j); }
+        }
+        private void SetShipPosXYVertical(Ship ship, int i, int j)
+        {
+            switch (ship.Size)
+            {
+                case 1:
+                    {
+                        ship.PosX = new int[] { i };
+                        ship.PosY = new int[] { j };
+                        ship.IsVertical = true;
+                        BriggSet--;
+                        break;
+                    }
+                case 2:
+                    {
+                        ship.PosX = new int[] { i, i + 1 };
+                        ship.PosY = new int[] { j, j };
+                        ship.IsVertical = true;
+                        CorvetteSet--;
+                        break;
+                    }
+                case 3:
+                    {
+                        ship.PosX = new int[] { i, i + 1, i + 2 };
+                        ship.PosY = new int[] { j, j, j };
+                        ship.IsVertical = true;
+                        FregateSet--;
+                        break;
+                    }
+                case 4:
                     {
                         ship.PosX = new int[] { i, i + 1, i + 2, i + 3 };
                         ship.PosY = new int[] { j, j, j, j };
-
+                        ship.IsVertical = true;
                         LincoreSet--;
-
-                        lincoreRadioButton.Enabled = false;
-
-                        foreach (Control control in cellsFlowLayoutPanel.Controls)
-                        {
-                            if (control is PictureBox pictureBox && pictureBox.Tag.ToString() == $"{i}:{j}")
-                            {
-                                pictureBox.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox && nextPictureBox.Tag.ToString() == $"{i + 1}:{j}")
-                            {
-                                nextPictureBox.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox2 && nextPictureBox2.Tag.ToString() == $"{i + 2}:{j}")
-                            {
-                                nextPictureBox2.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox3 && nextPictureBox3.Tag.ToString() == $"{i + 3}:{j}")
-                            {
-                                nextPictureBox3.BackColor = Color.Green;
-                            }
-                        }
+                        break;
                     }
-                }
             }
         }
-        private void SetFregateVertical(Ship ship, PictureBox? clickedPictureBox)
+        private void SetShipPosXYHorizontal(Ship ship, int i, int j)
         {
-            if (ship.Size == 3 && FregateSet != 0)
+            switch (ship.Size)
             {
-                string[] coordinates = clickedPictureBox.Tag.ToString().Split(':');
-
-                if (coordinates.Length == 2 && int.TryParse(coordinates[0], out int i) && int.TryParse(coordinates[1], out int j))
-                {
-                    if (i < 8)
+                case 1:
                     {
-                        ship.PosX = new int[] { i, i + 1, i + 2 };
-                        ship.PosY = new int[] { j, j, j };
-
-                        FregateSet--;
-
-                        if (FregateSet == 0)
-                        {
-                            fregateRadioButton.Enabled = false;
-                        }
-
-                        foreach (Control control in cellsFlowLayoutPanel.Controls)
-                        {
-                            if (control is PictureBox pictureBox && pictureBox.Tag.ToString() == $"{i}:{j}")
-                            {
-                                pictureBox.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox && nextPictureBox.Tag.ToString() == $"{i + 1}:{j}")
-                            {
-                                nextPictureBox.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox2 && nextPictureBox2.Tag.ToString() == $"{i + 2}:{j}")
-                            {
-                                nextPictureBox2.BackColor = Color.Green;
-                            }
-                        }
+                        ship.PosX = new int[] { i };
+                        ship.PosY = new int[] { j };
+                        BriggSet--;
+                        break;
                     }
-                }
-            }
-        }
-        private void SetFregateHorizontal(Ship ship, PictureBox? clickedPictureBox)
-        {
-            if (ship.Size == 3 && FregateSet != 0)
-            {
-                string[] coordinates = clickedPictureBox.Tag.ToString().Split(':');
-
-                if (coordinates.Length == 2 && int.TryParse(coordinates[0], out int i) && int.TryParse(coordinates[1], out int j))
-                {
-                    if (j < 8)
-                    {
-                        ship.PosX = new int[] { i, i, i };
-                        ship.PosY = new int[] { j, j + 1, j + 2 };
-
-                        FregateSet--;
-
-                        if (FregateSet == 0)
-                        {
-                            fregateRadioButton.Enabled = false;
-                        }
-
-                        foreach (Control control in cellsFlowLayoutPanel.Controls)
-                        {
-                            if (control is PictureBox pictureBox && pictureBox.Tag.ToString() == $"{i}:{j}")
-                            {
-                                pictureBox.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox && nextPictureBox.Tag.ToString() == $"{i}:{j + 1}")
-                            {
-                                nextPictureBox.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox2 && nextPictureBox2.Tag.ToString() == $"{i}:{j + 2}")
-                            {
-                                nextPictureBox2.BackColor = Color.Green;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        private void SetCorvetteVertical(Ship ship, PictureBox? clickedPictureBox)
-        {
-            if (ship.Size == 2 && CorvetteSet != 0)
-            {
-                string[] coordinates = clickedPictureBox.Tag.ToString().Split(':');
-
-                if (coordinates.Length == 2 && int.TryParse(coordinates[0], out int i) && int.TryParse(coordinates[1], out int j))
-                {
-                    if (i < 9)
-                    {
-                        ship.PosX = new int[] { i, i + 1, i + 2 };
-                        ship.PosY = new int[] { j, j, j };
-
-                        CorvetteSet--;
-
-                        if (CorvetteSet == 0)
-                        {
-                            corvetteRadioButton.Enabled = false;
-                        }
-
-                        foreach (Control control in cellsFlowLayoutPanel.Controls)
-                        {
-                            if (control is PictureBox pictureBox && pictureBox.Tag.ToString() == $"{i}:{j}")
-                            {
-                                pictureBox.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox && nextPictureBox.Tag.ToString() == $"{i + 1}:{j}")
-                            {
-                                nextPictureBox.BackColor = Color.Green;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void SetCorvetteHorizontal(Ship ship, PictureBox? clickedPictureBox)
-        {
-            if (ship.Size == 2 && CorvetteSet != 0)
-            {
-                string[] coordinates = clickedPictureBox.Tag.ToString().Split(':');
-
-                if (coordinates.Length == 2 && int.TryParse(coordinates[0], out int i) && int.TryParse(coordinates[1], out int j))
-                {
-                    if (j < 9)
+                case 2:
                     {
                         ship.PosX = new int[] { i, i };
                         ship.PosY = new int[] { j, j + 1 };
-
                         CorvetteSet--;
-
-                        if (CorvetteSet == 0)
-                        {
-                            corvetteRadioButton.Enabled = false;
-                        }
-
-                        foreach (Control control in cellsFlowLayoutPanel.Controls)
-                        {
-                            if (control is PictureBox pictureBox && pictureBox.Tag.ToString() == $"{i}:{j}")
-                            {
-                                pictureBox.BackColor = Color.Green;
-                            }
-                            else if (control is PictureBox nextPictureBox && nextPictureBox.Tag.ToString() == $"{i}:{j + 1}")
-                            {
-                                nextPictureBox.BackColor = Color.Green;
-                            }
-                        }
+                        break;
                     }
-                }
-            }
-        }
-        private void SetBrigg(Ship ship, PictureBox? clickedPictureBox)
-        {
-            if (ship.Size == 1 && BriggSet != 0)
-            {
-                string[] coordinates = clickedPictureBox.Tag.ToString().Split(':');
-
-                if (coordinates.Length == 2 && int.TryParse(coordinates[0], out int i) && int.TryParse(coordinates[1], out int j))
-                {
-                    ship.PosX = new int[] { i };
-                    ship.PosY = new int[] { j };
-
-                    BriggSet--;
-
-                    if (BriggSet == 0)
+                case 3:
                     {
-                        briggRadioButton.Enabled = false;
+                        ship.PosX = new int[] { i, i, i };
+                        ship.PosY = new int[] { j, j + 1, j + 2 };
+                        FregateSet--;
+                        break;
                     }
-
-                    foreach (Control control in cellsFlowLayoutPanel.Controls)
+                case 4:
                     {
-                        if (control is PictureBox pictureBox && pictureBox.Tag.ToString() == $"{i}:{j}")
-                        {
-                            pictureBox.BackColor = Color.Green;
-                        }
+                        ship.PosX = new int[] { i, i, i, i };
+                        ship.PosY = new int[] { j, j + 1, j + 2, j + 3 };
+                        LincoreSet--;
+                        break;
                     }
-                }
             }
         }
     }

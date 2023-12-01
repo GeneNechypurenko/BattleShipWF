@@ -35,8 +35,17 @@
             fregateRadioButton = new RadioButton();
             lincoreRadioButton = new RadioButton();
             groupBox1 = new GroupBox();
+            label1 = new Label();
+            briggSetLabel = new Label();
+            corvetteSetLabel = new Label();
+            fregateSetLabel = new Label();
+            lincoreSetLabel = new Label();
+            orientationSelectedLabel = new Label();
+            shipSelectedLabel = new Label();
+            notificationLabel = new Label();
             cellsFlowLayoutPanel = new FlowLayoutPanel();
             fleetGroupBox.SuspendLayout();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // fleetGroupBox
@@ -78,6 +87,7 @@
             briggRadioButton.Padding = new Padding(10);
             briggRadioButton.Size = new Size(90, 48);
             briggRadioButton.TabIndex = 3;
+            briggRadioButton.Tag = "BRIGG";
             briggRadioButton.Text = "BRIGG";
             briggRadioButton.UseVisualStyleBackColor = true;
             // 
@@ -89,6 +99,7 @@
             corvetteRadioButton.Padding = new Padding(10);
             corvetteRadioButton.Size = new Size(116, 48);
             corvetteRadioButton.TabIndex = 2;
+            corvetteRadioButton.Tag = "CORVETTE";
             corvetteRadioButton.Text = "CORVETTE";
             corvetteRadioButton.UseVisualStyleBackColor = true;
             // 
@@ -100,6 +111,7 @@
             fregateRadioButton.Padding = new Padding(10);
             fregateRadioButton.Size = new Size(107, 48);
             fregateRadioButton.TabIndex = 1;
+            fregateRadioButton.Tag = "FREGATE";
             fregateRadioButton.Text = "FREGATE";
             fregateRadioButton.UseVisualStyleBackColor = true;
             // 
@@ -113,11 +125,20 @@
             lincoreRadioButton.Size = new Size(105, 48);
             lincoreRadioButton.TabIndex = 0;
             lincoreRadioButton.TabStop = true;
+            lincoreRadioButton.Tag = "LINCORE";
             lincoreRadioButton.Text = "LINCORE";
             lincoreRadioButton.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(briggSetLabel);
+            groupBox1.Controls.Add(corvetteSetLabel);
+            groupBox1.Controls.Add(fregateSetLabel);
+            groupBox1.Controls.Add(lincoreSetLabel);
+            groupBox1.Controls.Add(orientationSelectedLabel);
+            groupBox1.Controls.Add(shipSelectedLabel);
+            groupBox1.Controls.Add(notificationLabel);
             groupBox1.Dock = DockStyle.Left;
             groupBox1.FlatStyle = FlatStyle.Flat;
             groupBox1.Font = new Font("Bahnschrift Condensed", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
@@ -126,10 +147,79 @@
             groupBox1.Margin = new Padding(10);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(10);
-            groupBox1.Size = new Size(180, 344);
+            groupBox1.Size = new Size(184, 344);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
-            groupBox1.Text = "HINTS";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(3, 173);
+            label1.Name = "label1";
+            label1.Size = new Size(169, 24);
+            label1.TabIndex = 7;
+            label1.Text = "SHIPS FOR DEPLOYMENT:";
+            // 
+            // briggSetLabel
+            // 
+            briggSetLabel.AutoSize = true;
+            briggSetLabel.Location = new Point(3, 269);
+            briggSetLabel.Name = "briggSetLabel";
+            briggSetLabel.Size = new Size(55, 24);
+            briggSetLabel.TabIndex = 6;
+            briggSetLabel.Text = "BRIGG: ";
+            // 
+            // corvetteSetLabel
+            // 
+            corvetteSetLabel.AutoSize = true;
+            corvetteSetLabel.Location = new Point(3, 245);
+            corvetteSetLabel.Name = "corvetteSetLabel";
+            corvetteSetLabel.Size = new Size(82, 24);
+            corvetteSetLabel.TabIndex = 5;
+            corvetteSetLabel.Text = "CORVETTE: ";
+            // 
+            // fregateSetLabel
+            // 
+            fregateSetLabel.AutoSize = true;
+            fregateSetLabel.Location = new Point(3, 221);
+            fregateSetLabel.Name = "fregateSetLabel";
+            fregateSetLabel.Size = new Size(73, 24);
+            fregateSetLabel.TabIndex = 4;
+            fregateSetLabel.Text = "FREGATE: ";
+            // 
+            // lincoreSetLabel
+            // 
+            lincoreSetLabel.AutoSize = true;
+            lincoreSetLabel.Location = new Point(3, 197);
+            lincoreSetLabel.Name = "lincoreSetLabel";
+            lincoreSetLabel.Size = new Size(71, 24);
+            lincoreSetLabel.TabIndex = 3;
+            lincoreSetLabel.Text = "LINCORE: ";
+            // 
+            // orientationSelectedLabel
+            // 
+            orientationSelectedLabel.AutoSize = true;
+            orientationSelectedLabel.Location = new Point(3, 131);
+            orientationSelectedLabel.Name = "orientationSelectedLabel";
+            orientationSelectedLabel.Size = new Size(0, 24);
+            orientationSelectedLabel.TabIndex = 2;
+            // 
+            // shipSelectedLabel
+            // 
+            shipSelectedLabel.AutoSize = true;
+            shipSelectedLabel.Location = new Point(3, 107);
+            shipSelectedLabel.Name = "shipSelectedLabel";
+            shipSelectedLabel.Size = new Size(0, 24);
+            shipSelectedLabel.TabIndex = 1;
+            // 
+            // notificationLabel
+            // 
+            notificationLabel.AutoSize = true;
+            notificationLabel.ForeColor = Color.Crimson;
+            notificationLabel.Location = new Point(3, 57);
+            notificationLabel.Name = "notificationLabel";
+            notificationLabel.Size = new Size(0, 24);
+            notificationLabel.TabIndex = 0;
             // 
             // cellsFlowLayoutPanel
             // 
@@ -151,6 +241,8 @@
             Size = new Size(742, 344);
             fleetGroupBox.ResumeLayout(false);
             fleetGroupBox.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -164,5 +256,13 @@
         private CheckBox rotateCheckBox;
         private GroupBox groupBox1;
         private FlowLayoutPanel cellsFlowLayoutPanel;
+        private Label notificationLabel;
+        private Label shipSelectedLabel;
+        private Label briggSetLabel;
+        private Label corvetteSetLabel;
+        private Label fregateSetLabel;
+        private Label lincoreSetLabel;
+        private Label orientationSelectedLabel;
+        private Label label1;
     }
 }

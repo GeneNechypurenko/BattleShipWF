@@ -45,22 +45,11 @@ namespace BattleShip.Models
         }
         public Board()
         {
-            Ships = new ObservableCollection<Ship>
-            {
-                new Ship (){Size = 1, IsSunk = false, IsVertical = false },
-                new Ship (){Size = 1, IsSunk = false, IsVertical = false },
-                new Ship (){Size = 1, IsSunk = false, IsVertical = false },
-                new Ship (){Size = 1, IsSunk = false, IsVertical = false },
-                new Ship (){Size = 2, IsSunk = false, IsVertical = false },
-                new Ship (){Size = 2, IsSunk = false, IsVertical = false },
-                new Ship (){Size = 2, IsSunk = false, IsVertical = false },
-                new Ship (){Size = 3, IsSunk = false, IsVertical = false },
-                new Ship (){Size = 3, IsSunk = false, IsVertical = false },
-                new Ship (){Size = 4, IsSunk = false, IsVertical = false },
-            };
+            Ships = new ObservableCollection<Ship>();
 
             Board2d = new int[10, 10];
             IsOccupiedCell = new bool[10, 10];
+
             for (int i = 0; i < Board2d.GetLength(0); i++)
             {
                 for (int j = 0; j < Board2d.GetLength(1); j++)
