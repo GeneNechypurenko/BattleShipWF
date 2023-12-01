@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BattleShip.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleShip.Models
+namespace BattleShip.ViewModel
 {
     public class Board : INotifyPropertyChanged
     {
@@ -20,6 +21,46 @@ namespace BattleShip.Models
             {
                 _ships = value;
                 OnPropertyChanged(nameof(Ship));
+            }
+        }
+        private int _lincoreSet = 1;
+        public int LincoreSet
+        {
+            get => _lincoreSet;
+            set
+            {
+                _lincoreSet = value;
+                OnPropertyChanged(nameof(LincoreSet));
+            }
+        }
+        private int _fregateSet = 2;
+        public int FregateSet
+        {
+            get => _fregateSet;
+            set
+            {
+                _fregateSet = value;
+                OnPropertyChanged(nameof(FregateSet));
+            }
+        }
+        private int _corvetteSet = 3;
+        public int CorvetteSet
+        {
+            get => _corvetteSet;
+            set
+            {
+                _corvetteSet = value;
+                OnPropertyChanged(nameof(CorvetteSet));
+            }
+        }
+        private int _briggSet = 4;
+        public int BriggSet
+        {
+            get => _briggSet;
+            set
+            {
+                _briggSet = value;
+                OnPropertyChanged(nameof(BriggSet));
             }
         }
 

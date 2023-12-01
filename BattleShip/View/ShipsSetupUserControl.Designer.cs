@@ -36,14 +36,18 @@
             lincoreRadioButton = new RadioButton();
             groupBox1 = new GroupBox();
             label1 = new Label();
-            briggSetLabel = new Label();
-            corvetteSetLabel = new Label();
-            fregateSetLabel = new Label();
-            lincoreSetLabel = new Label();
+            infoLabel4 = new Label();
+            infoLabel3 = new Label();
+            infoLabel2 = new Label();
+            infoLabel1 = new Label();
             orientationSelectedLabel = new Label();
             shipSelectedLabel = new Label();
             notificationLabel = new Label();
             cellsFlowLayoutPanel = new FlowLayoutPanel();
+            lincoreSetLabel = new Label();
+            fregateSetLabel = new Label();
+            corvetteSetLabel = new Label();
+            briggSetLabel = new Label();
             fleetGroupBox.SuspendLayout();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -131,11 +135,15 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(briggSetLabel);
             groupBox1.Controls.Add(corvetteSetLabel);
             groupBox1.Controls.Add(fregateSetLabel);
             groupBox1.Controls.Add(lincoreSetLabel);
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(infoLabel4);
+            groupBox1.Controls.Add(infoLabel3);
+            groupBox1.Controls.Add(infoLabel2);
+            groupBox1.Controls.Add(infoLabel1);
             groupBox1.Controls.Add(orientationSelectedLabel);
             groupBox1.Controls.Add(shipSelectedLabel);
             groupBox1.Controls.Add(notificationLabel);
@@ -160,41 +168,41 @@
             label1.TabIndex = 7;
             label1.Text = "SHIPS FOR DEPLOYMENT:";
             // 
-            // briggSetLabel
+            // infoLabel4
             // 
-            briggSetLabel.AutoSize = true;
-            briggSetLabel.Location = new Point(3, 269);
-            briggSetLabel.Name = "briggSetLabel";
-            briggSetLabel.Size = new Size(55, 24);
-            briggSetLabel.TabIndex = 6;
-            briggSetLabel.Text = "BRIGG: ";
+            infoLabel4.AutoSize = true;
+            infoLabel4.Location = new Point(3, 269);
+            infoLabel4.Name = "infoLabel4";
+            infoLabel4.Size = new Size(55, 24);
+            infoLabel4.TabIndex = 6;
+            infoLabel4.Text = "BRIGG: ";
             // 
-            // corvetteSetLabel
+            // infoLabel3
             // 
-            corvetteSetLabel.AutoSize = true;
-            corvetteSetLabel.Location = new Point(3, 245);
-            corvetteSetLabel.Name = "corvetteSetLabel";
-            corvetteSetLabel.Size = new Size(82, 24);
-            corvetteSetLabel.TabIndex = 5;
-            corvetteSetLabel.Text = "CORVETTE: ";
+            infoLabel3.AutoSize = true;
+            infoLabel3.Location = new Point(3, 245);
+            infoLabel3.Name = "infoLabel3";
+            infoLabel3.Size = new Size(82, 24);
+            infoLabel3.TabIndex = 5;
+            infoLabel3.Text = "CORVETTE: ";
             // 
-            // fregateSetLabel
+            // infoLabel2
             // 
-            fregateSetLabel.AutoSize = true;
-            fregateSetLabel.Location = new Point(3, 221);
-            fregateSetLabel.Name = "fregateSetLabel";
-            fregateSetLabel.Size = new Size(73, 24);
-            fregateSetLabel.TabIndex = 4;
-            fregateSetLabel.Text = "FREGATE: ";
+            infoLabel2.AutoSize = true;
+            infoLabel2.Location = new Point(3, 221);
+            infoLabel2.Name = "infoLabel2";
+            infoLabel2.Size = new Size(73, 24);
+            infoLabel2.TabIndex = 4;
+            infoLabel2.Text = "FREGATE: ";
             // 
-            // lincoreSetLabel
+            // infoLabel1
             // 
-            lincoreSetLabel.AutoSize = true;
-            lincoreSetLabel.Location = new Point(3, 197);
-            lincoreSetLabel.Name = "lincoreSetLabel";
-            lincoreSetLabel.Size = new Size(71, 24);
-            lincoreSetLabel.TabIndex = 3;
-            lincoreSetLabel.Text = "LINCORE: ";
+            infoLabel1.AutoSize = true;
+            infoLabel1.Location = new Point(3, 197);
+            infoLabel1.Name = "infoLabel1";
+            infoLabel1.Size = new Size(71, 24);
+            infoLabel1.TabIndex = 3;
+            infoLabel1.Text = "LINCORE: ";
             // 
             // orientationSelectedLabel
             // 
@@ -229,6 +237,38 @@
             cellsFlowLayoutPanel.Size = new Size(300, 300);
             cellsFlowLayoutPanel.TabIndex = 2;
             // 
+            // lincoreSetLabel
+            // 
+            lincoreSetLabel.AutoSize = true;
+            lincoreSetLabel.Location = new Point(80, 197);
+            lincoreSetLabel.Name = "lincoreSetLabel";
+            lincoreSetLabel.Size = new Size(0, 24);
+            lincoreSetLabel.TabIndex = 8;
+            // 
+            // fregateSetLabel
+            // 
+            fregateSetLabel.AutoSize = true;
+            fregateSetLabel.Location = new Point(80, 221);
+            fregateSetLabel.Name = "fregateSetLabel";
+            fregateSetLabel.Size = new Size(0, 24);
+            fregateSetLabel.TabIndex = 9;
+            // 
+            // corvetteSetLabel
+            // 
+            corvetteSetLabel.AutoSize = true;
+            corvetteSetLabel.Location = new Point(80, 245);
+            corvetteSetLabel.Name = "corvetteSetLabel";
+            corvetteSetLabel.Size = new Size(0, 24);
+            corvetteSetLabel.TabIndex = 10;
+            // 
+            // briggSetLabel
+            // 
+            briggSetLabel.AutoSize = true;
+            briggSetLabel.Location = new Point(80, 269);
+            briggSetLabel.Name = "briggSetLabel";
+            briggSetLabel.Size = new Size(0, 24);
+            briggSetLabel.TabIndex = 11;
+            // 
             // ShipsSetupUserControl
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
@@ -258,11 +298,15 @@
         private FlowLayoutPanel cellsFlowLayoutPanel;
         private Label notificationLabel;
         private Label shipSelectedLabel;
+        private Label infoLabel4;
+        private Label infoLabel3;
+        private Label infoLabel2;
+        private Label infoLabel1;
+        private Label orientationSelectedLabel;
+        private Label label1;
         private Label briggSetLabel;
         private Label corvetteSetLabel;
         private Label fregateSetLabel;
         private Label lincoreSetLabel;
-        private Label orientationSelectedLabel;
-        private Label label1;
     }
 }

@@ -1,15 +1,11 @@
 ﻿using BattleShip.Models;
+using BattleShip.ViewModel;
 using RadioButton = System.Windows.Forms.RadioButton;
 
 namespace BattleShip.View
 {
     public partial class ShipsSetupUserControl : UserControl
     {
-        private int LincoreSet { get; set; } = 1;
-        private int FregateSet { get; set; } = 2;
-        private int CorvetteSet { get; set; } = 3;
-        private int BriggSet { get; set; } = 4;
-
         private Board board;
 
         private readonly int boardCells = 10;
@@ -22,6 +18,14 @@ namespace BattleShip.View
             InitializeComponent();
             Paint += ShipsSetupUserControl_Paint;
             InitializeNotificationLabels();
+
+            Load += (s, e) =>
+            {
+                lincoreSetLabel.DataBindings.Add("Text", board, "LincoreSet");
+                fregateSetLabel.DataBindings.Add("Text", board, "FregateSet");
+                corvetteSetLabel.DataBindings.Add("Text", board, "CorvetteSet");
+                briggSetLabel.DataBindings.Add("Text", board, "BriggSet");
+            };
         }
         private void InitializeNotificationLabels()
         {
@@ -44,11 +48,6 @@ namespace BattleShip.View
                 orientationSelectedLabel.Text = "ORIENTATION HORIZONTAL";
             }
             rotateCheckBox.CheckedChanged += RotateCheckBox_CheckedChanged;
-
-            lincoreSetLabel.Text += LincoreSet.ToString();
-            fregateSetLabel.Text += FregateSet.ToString();
-            corvetteSetLabel.Text += CorvetteSet.ToString();
-            briggSetLabel.Text += BriggSet.ToString();
         }
 
         private void RotateCheckBox_CheckedChanged(object? sender, EventArgs e)
@@ -144,29 +143,29 @@ namespace BattleShip.View
         {
             PictureBox clickedPictureBox = sender as PictureBox;
 
-            if (lincoreRadioButton.Checked && LincoreSet != 0)
+            if (lincoreRadioButton.Checked && board.LincoreSet != 0)
             {
                 Ship ship = new Ship { Size = 4, IsSunk = false, IsVertical = false };
                 PlaceShipOnBoard(ship, clickedPictureBox);
-                if (LincoreSet == 0) { lincoreRadioButton.Enabled = false; }
+                if (board.LincoreSet == 0) { lincoreRadioButton.Enabled = false; }
             }
-            else if (fregateRadioButton.Checked && FregateSet != 0)
+            else if (fregateRadioButton.Checked && board.FregateSet != 0)
             {
                 Ship ship = new Ship { Size = 3, IsSunk = false, IsVertical = false };
                 PlaceShipOnBoard(ship, clickedPictureBox);
-                if (FregateSet == 0) { fregateRadioButton.Enabled = false; }
+                if (board.FregateSet == 0) { fregateRadioButton.Enabled = false; }
             }
-            else if (corvetteRadioButton.Checked && CorvetteSet != 0)
+            else if (corvetteRadioButton.Checked && board.CorvetteSet != 0)
             {
                 Ship ship = new Ship { Size = 2, IsSunk = false, IsVertical = false };
                 PlaceShipOnBoard(ship, clickedPictureBox);
-                if (CorvetteSet == 0) { corvetteRadioButton.Enabled = false; }
+                if (board.CorvetteSet == 0) { corvetteRadioButton.Enabled = false; }
             }
-            else if (briggRadioButton.Checked && BriggSet != 0)
+            else if (briggRadioButton.Checked && board.BriggSet != 0)
             {
                 Ship ship = new Ship { Size = 1, IsSunk = false, IsVertical = false };
                 PlaceShipOnBoard(ship, clickedPictureBox);
-                if (BriggSet == 0) { briggRadioButton.Enabled = false; }
+                if (board.BriggSet == 0) { briggRadioButton.Enabled = false; }
             }
         }
         private void PlaceShipOnBoard(Ship ship, PictureBox? clickedPictureBox)
@@ -459,7 +458,7 @@ namespace BattleShip.View
                         ship.PosX = new int[] { i };
                         ship.PosY = new int[] { j };
                         ship.IsVertical = true;
-                        BriggSet--;
+                        board.BriggSet--;
                         break;
                     }
                 case 2:
@@ -467,7 +466,7 @@ namespace BattleShip.View
                         ship.PosX = new int[] { i, i + 1 };
                         ship.PosY = new int[] { j, j };
                         ship.IsVertical = true;
-                        CorvetteSet--;
+                        board.CorvetteSet--;
                         break;
                     }
                 case 3:
@@ -475,7 +474,7 @@ namespace BattleShip.View
                         ship.PosX = new int[] { i, i + 1, i + 2 };
                         ship.PosY = new int[] { j, j, j };
                         ship.IsVertical = true;
-                        FregateSet--;
+                        board.FregateSet--;
                         break;
                     }
                 case 4:
@@ -483,7 +482,7 @@ namespace BattleShip.View
                         ship.PosX = new int[] { i, i + 1, i + 2, i + 3 };
                         ship.PosY = new int[] { j, j, j, j };
                         ship.IsVertical = true;
-                        LincoreSet--;
+                        board.LincoreSet--;
                         break;
                     }
             }
@@ -496,28 +495,28 @@ namespace BattleShip.View
                     {
                         ship.PosX = new int[] { i };
                         ship.PosY = new int[] { j };
-                        BriggSet--;
+                        board.BriggSet--;
                         break;
                     }
                 case 2:
                     {
                         ship.PosX = new int[] { i, i };
                         ship.PosY = new int[] { j, j + 1 };
-                        CorvetteSet--;
+                        board.CorvetteSet--;
                         break;
                     }
                 case 3:
                     {
                         ship.PosX = new int[] { i, i, i };
                         ship.PosY = new int[] { j, j + 1, j + 2 };
-                        FregateSet--;
+                        board.FregateSet--;
                         break;
                     }
                 case 4:
                     {
                         ship.PosX = new int[] { i, i, i, i };
                         ship.PosY = new int[] { j, j + 1, j + 2, j + 3 };
-                        LincoreSet--;
+                        board.LincoreSet--;
                         break;
                     }
             }
