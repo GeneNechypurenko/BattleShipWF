@@ -6,15 +6,18 @@ namespace BattleShip.View
 {
     public partial class ShipsSetupUserControl : UserControl
     {
+        private MainForm mainForm;
+
         private Board board;
 
         private readonly int boardCells = 10;
         private readonly int boardCellSize = 30;
         private readonly int boardPaddingLeft = 220;
         private readonly int boardPaddingTop = 30;
-        public ShipsSetupUserControl()
+        public ShipsSetupUserControl(MainForm mainForm)
         {
             board = new Board();
+            this.mainForm = mainForm;
             InitializeComponent();
             Paint += ShipsSetupUserControl_Paint;
             InitializeNotificationLabels();
@@ -185,6 +188,11 @@ namespace BattleShip.View
 
                     notificationLabel.ForeColor = Color.LawnGreen;
                     notificationLabel.Text = "SHIP PLACED!";
+
+                    if (board.LincoreSet == 0 && board.FregateSet == 0 && board.CorvetteSet == 0 && board.BriggSet == 0)
+                    {
+                        mainForm.StartGameButton.Enabled = true;
+                    }
                 }
                 else
                 {

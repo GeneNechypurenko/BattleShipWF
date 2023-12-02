@@ -1,10 +1,13 @@
 using BattleShip.View;
+using BattleShip.ViewModel;
 
 namespace BattleShip
 {
     public partial class MainForm : Form
     {
-        ShipsSetupUserControl shipsSetupUserControl;
+        private ShipsSetupUserControl shipsSetupUserControl;
+        private Button startGameButton;
+        public Button StartGameButton { get => startGameButton; }
         public MainForm()
         {
             InitializeComponent();
@@ -13,7 +16,7 @@ namespace BattleShip
         private void startScreenButton_Click(object sender, EventArgs e)
         {
             RenderScreen();
-            shipsSetupUserControl = new ShipsSetupUserControl();
+            shipsSetupUserControl = new ShipsSetupUserControl(this);
             Controls.Add(shipsSetupUserControl);
             shipsSetupUserControl.Show();
         }
@@ -27,7 +30,7 @@ namespace BattleShip
 
         private void AddButton()
         {
-            Button startGameButton = new Button();
+            startGameButton = new Button();
             buttonPanel.Controls.Add(startGameButton);
             startGameButton.FlatStyle = FlatStyle.Flat;
             startGameButton.FlatAppearance.BorderSize = 0;
